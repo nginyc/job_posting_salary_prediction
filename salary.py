@@ -25,32 +25,31 @@ def get_test_dataset():
 
 def evaluate_train_test_predictions(y_train_pred, y_test_pred):
     y_train = df_y_train.values
-    y_test =df_y_test.values
+    y_test = df_y_test.values
     y_train_exp = 10**y_train
     y_test_exp = 10**y_test
     y_train_pred_exp = 10**np.array(y_train_pred)
     y_test_pred_exp = 10**np.array(y_test_pred)
-    y_train_mean = np.mean(df_y_train)
+    y_train_exp_mean = np.mean(y_train_exp)
 
-    train_r2 = r2_score(y_train, y_train_pred)
-    test_r2 = r2_score(y_test, y_test_pred)
+    train_r2 = r2_score(y_train_exp, y_train_pred_exp)
+    test_r2 = r2_score(y_test_exp, y_test_pred_exp)
     print(f"Train R2: {train_r2:.4f}")
     print(f"Test R2: {test_r2:.4f}")
 
-    train_rmse = np.sqrt(mean_squared_error(y_train, y_train_pred))
-    test_rmse = np.sqrt(mean_squared_error(y_test, y_test_pred))
+    train_rmse = np.sqrt(mean_squared_error(y_train_exp, y_train_pred_exp))
+    test_rmse = np.sqrt(mean_squared_error(y_test_exp, y_test_pred_exp))
     print(f"Train RMSE: {train_rmse:.4f}")
     print(f"Test RMSE: {test_rmse:.4f}")
 
-    train_mae = mean_absolute_error(y_train, y_train_pred)
-    test_mae = mean_absolute_error(y_test, y_test_pred)
+    train_mae = mean_absolute_error(y_train_exp, y_train_pred_exp)
+    test_mae = mean_absolute_error(y_test_exp, y_test_pred_exp)
     print(f"Train MAE: {train_mae:.4f}")
     print(f"Test MAE: {test_mae:.4f}")
 
-    test_mae_exp = mean_absolute_error(y_test_exp, y_test_pred_exp)
-    test_mae_exp_mean = mean_absolute_error(y_test_exp, [y_train_mean]*len(y_test_exp))
-    improvement = ((test_mae_exp_mean-test_mae_exp) / test_mae_exp_mean)*100
-    print(f'On average, our predicted salaries are ${test_mae_exp:.2f} off the true salaries')
+    test_mae_mean = mean_absolute_error(y_test_exp, [y_train_exp_mean]*len(y_test_exp))
+    improvement = ((test_mae_mean-test_mae) / test_mae_mean)*100
+    print(f'On average, our predicted salaries are ${test_mae:.2f} off the true salaries')
     print(f'This is {improvement:.2f}% better than a naive global mean')
 
 
