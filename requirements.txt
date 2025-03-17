@@ -1,0 +1,13 @@
+jupyterlab
+scikit-learn
+seaborn
+matplotlib
+pandas
+xgboost
+numpy
+sentence_transformers
+gensim
+nltk
+tensorflow
+category_encoders
+tf-keras
