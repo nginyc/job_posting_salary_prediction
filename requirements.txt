@@ -13,3 +13,4 @@ category_encoders
 tf-keras
 openai
 dotenv
+tqdm

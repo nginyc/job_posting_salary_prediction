@@ -10,7 +10,7 @@ from sentence_transformers import SentenceTransformer
 # --------------------------------------
 # Load and split data
 # --------------------------------------
-_df_jobs_clean = pd.read_csv('data/jobs_clean_nt.csv')
+_df_jobs_clean = pd.read_csv('data/jobs_clean_jd.csv')
 df_X = _df_jobs_clean.drop(columns=["normalized_salary_log10", "normalized_salary", "min_salary", "max_salary", "med_salary"])
 df_y = _df_jobs_clean["normalized_salary"]
 
@@ -61,7 +61,6 @@ def evaluate_test_predictions(y_test_pred):
     improvement = ((test_mae_mean-test_mae) / test_mae_mean)*100
     print(f'On average, our predicted salaries are ${test_mae:.2f} off the true salaries')
     print(f'This is {improvement:.2f}% better than a naive global mean')
-
 
 
 ## --------------------------------------
