@@ -1,8 +1,10 @@
 import numpy as np
 import pandas as pd
+from sklearn.base import BaseEstimator
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 from sklearn.preprocessing import OrdinalEncoder
+from sentence_transformers import SentenceTransformer
 
 # --------------------------------------
 # Load and split data
@@ -64,6 +66,23 @@ def evaluate_test_predictions(y_test_pred):
 ## --------------------------------------
 ## Functions to encode features
 ## --------------------------------------
+
+class SentenceBertEncoder(BaseEstimator):  
+    def __init__(self):
+        # We use the pre-trained sentence-BERT model for encoding text data
+        # We pick the model with highest performance on sentence embeddings
+        # See https://www.sbert.net/docs/sentence_transformer/pretrained_models.html#original-models
+        self._model = SentenceTransformer('all-mpnet-base-v2')
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        return self._model.encode(X)
+    
+    def similarity(self, X, Y):
+        return self._model.similarity(X, Y)
+    
 
 experience_level_encoder = OrdinalEncoder(
     categories=[[
