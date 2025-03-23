@@ -12,6 +12,8 @@ source ./venv/bin/activate
 pip install -r requirements.txt
 ```
 
+Duplicate `.env.template` as `.env` and populate those secrets.
+
 ## Run notebooks
 
 Run the notebooks in the following order:
