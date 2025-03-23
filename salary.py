@@ -1,3 +1,4 @@
+from idna import encode
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
@@ -76,12 +77,18 @@ class SentenceBertEncoder(BaseEstimator):
 
     def fit(self, X, y=None):
         return self
+    
+    def encode(self, X):
+        return self._model.encode(list(X))
 
-    def transform(self, X):
-        return self._model.encode(X)
+    def transform(self, X: pd.DataFrame):
+        return self.encode(X.T.values[0])
     
     def similarity(self, X, Y):
         return self._model.similarity(X, Y)
+    
+    def get_feature_names_out(self):
+        return [f'sbert_{i}' for i in range(768)]
     
 
 experience_level_encoder = OrdinalEncoder(
