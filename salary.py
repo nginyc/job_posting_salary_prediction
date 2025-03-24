@@ -5,31 +5,34 @@ from sklearn.base import BaseEstimator
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 from sklearn.preprocessing import OrdinalEncoder
+import functools
 from sentence_transformers import SentenceTransformer
-
-# --------------------------------------
-# Load and split data
-# --------------------------------------
-_df_jobs_clean = pd.read_csv('data/jobs_clean_jd.csv')
-df_X = _df_jobs_clean.drop(columns=["normalized_salary_log10", "normalized_salary", "min_salary", "max_salary", "med_salary"])
-df_y = _df_jobs_clean["normalized_salary"]
-
-df_X_train, df_X_test, df_y_train, df_y_test = train_test_split(df_X, df_y, test_size=0.2, random_state=42)
 
 # --------------------------------------
 # Functions for train and test datasets
 # --------------------------------------
 
+@functools.lru_cache(maxsize=None)
+def get_dataset():
+    df_jobs_clean = pd.read_csv('data/jobs_clean_jd.csv')
+    df_X = df_jobs_clean.drop(columns=["normalized_salary_log10", "normalized_salary", "min_salary", "max_salary", "med_salary"])
+    df_y = df_jobs_clean["normalized_salary"]
+    df_X_train, df_X_test, df_y_train, df_y_test = train_test_split(df_X, df_y, test_size=0.2, random_state=42)
+    return (df_X_train, df_X_test, df_y_train, df_y_test)
+
 def get_train_dataset():
+    (df_X_train, _, df_y_train, _) = get_dataset()
     return df_X_train, df_y_train
 
 def get_test_dataset():
+    (_, df_X_test, _, df_y_test) = get_dataset()
     return df_X_test, df_y_test
 
 def evaluate_train_predictions(y_train_pred):
     '''
     Evaluate the train predictions against the true train values (normalized_salary)
     '''
+    (_, _, df_y_train, _) = get_dataset()
     y_train = df_y_train.values
 
     train_r2 = r2_score(y_train, y_train_pred)
@@ -45,6 +48,7 @@ def evaluate_test_predictions(y_test_pred):
     '''
     Evaluate the test predictions against the true test values (normalized_salary)
     '''
+    (_, _, df_y_train, df_y_test) = get_dataset()
     y_train_mean = df_y_train.mean()
     y_test = df_y_test.values
 
