@@ -5,3 +5,4 @@ backups
 extracted_jds
 .env
 models/
+.DS_Store

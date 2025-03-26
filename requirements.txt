@@ -16,4 +16,3 @@ dotenv
 tqdm
 scikit-optimize
 joblib
-gradio
