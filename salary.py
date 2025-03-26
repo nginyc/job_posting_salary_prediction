@@ -78,7 +78,7 @@ def evaluate_test_predictions(y_test_pred):
 
     return result
 
-def plot_evaluation_results(names, results):
+def plot_evaluation_results(names, results, x_label_rotation=0):
     '''
     Plot the test evaluation results for each model.
     '''
@@ -101,21 +101,21 @@ def plot_evaluation_results(names, results):
     axes[0].set_title('Test R² Comparison', fontsize=14)
     axes[0].set_ylabel('Test R²', fontsize=12)
     axes[0].set_xlabel(None)
-    axes[0].set_xticklabels(axes[0].get_xticklabels(), rotation=45, ha='right')
+    axes[0].set_xticklabels(axes[0].get_xticklabels(), rotation=x_label_rotation)
 
     # Plot Test RMSE Comparison
     sns.barplot(x='Model', y='Test RMSE', data=metrics_df, ax=axes[1], palette='Greens')
     axes[1].set_title('Test RMSE Comparison', fontsize=14)
     axes[1].set_ylabel('Test RMSE', fontsize=12)
     axes[1].set_xlabel(None)
-    axes[1].set_xticklabels(axes[1].get_xticklabels(), rotation=45, ha='right')
+    axes[1].set_xticklabels(axes[1].get_xticklabels(), rotation=x_label_rotation)
 
     # Plot Test MAE Comparison
     sns.barplot(x='Model', y='Test MAE', data=metrics_df, ax=axes[2], palette='Oranges')
     axes[2].set_title('Test MAE Comparison', fontsize=14)
     axes[2].set_ylabel('Test MAE', fontsize=12)
     axes[2].set_xlabel(None)
-    axes[2].set_xticklabels(axes[2].get_xticklabels(), rotation=45, ha='right')
+    axes[2].set_xticklabels(axes[2].get_xticklabels(), rotation=x_label_rotation)
 
     # Remove the borders (spines) and background for each subplot
     for ax in axes:
