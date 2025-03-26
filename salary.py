@@ -6,6 +6,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 from sklearn.preprocessing import OrdinalEncoder
 import functools
+import seaborn as sns
+import matplotlib.pyplot as plt
 from sentence_transformers import SentenceTransformer
 
 # --------------------------------------
@@ -44,12 +46,19 @@ def evaluate_train_predictions(y_train_pred):
     train_mae = mean_absolute_error(y_train, y_train_pred)
     print(f"Train MAE: {train_mae:.4f}")
 
+    result = { 
+        'r2': train_r2,
+        'rmse': train_rmse,
+        'mae': train_mae    
+    }
+
+    return result
+
 def evaluate_test_predictions(y_test_pred):
     '''
     Evaluate the test predictions against the true test values (normalized_salary)
     '''
-    (_, _, df_y_train, df_y_test) = get_dataset()
-    y_train_mean = df_y_train.mean()
+    (_, _, _, df_y_test) = get_dataset()
     y_test = df_y_test.values
 
     test_r2 = r2_score(y_test, y_test_pred)
@@ -61,10 +70,62 @@ def evaluate_test_predictions(y_test_pred):
     test_mae = mean_absolute_error(y_test, y_test_pred)
     print(f"Test MAE: {test_mae:.4f}")
 
-    test_mae_mean = mean_absolute_error(y_test, [y_train_mean]*len(y_test))
-    improvement = ((test_mae_mean-test_mae) / test_mae_mean)*100
-    print(f'On average, our predicted salaries are ${test_mae:.2f} off the true salaries')
-    print(f'This is {improvement:.2f}% better than a naive global mean')
+    result = { 
+        'r2': test_r2,
+        'rmse': test_rmse,
+        'mae': test_mae
+    }
+
+    return result
+
+def plot_evaluation_results(names, results):
+    '''
+    Plot the test evaluation results for each model.
+    '''
+
+    # Performance metrics for each model
+    metrics_data = {
+        'Model': names,
+        'Test R²': [result['r2'] for result in results],
+        'Test RMSE': [result['rmse'] for result in results],
+        'Test MAE': [result['mae'] for result in results]
+    }
+
+    metrics_df = pd.DataFrame(metrics_data)
+
+    # Create subplots for Test and Train metrics comparison with transparent background
+    fig, axes = plt.subplots(1, 3, figsize=(18, 6), facecolor='none')
+
+    # Plot Test R² Comparison
+    sns.barplot(x='Model', y='Test R²', data=metrics_df, ax=axes[0], palette='Blues')
+    axes[0].set_title('Test R² Comparison', fontsize=14)
+    axes[0].set_ylabel('Test R²', fontsize=12)
+    axes[0].set_xlabel(None)
+    axes[0].set_xticklabels(axes[0].get_xticklabels(), rotation=45, ha='right')
+
+    # Plot Test RMSE Comparison
+    sns.barplot(x='Model', y='Test RMSE', data=metrics_df, ax=axes[1], palette='Greens')
+    axes[1].set_title('Test RMSE Comparison', fontsize=14)
+    axes[1].set_ylabel('Test RMSE', fontsize=12)
+    axes[1].set_xlabel(None)
+    axes[1].set_xticklabels(axes[1].get_xticklabels(), rotation=45, ha='right')
+
+    # Plot Test MAE Comparison
+    sns.barplot(x='Model', y='Test MAE', data=metrics_df, ax=axes[2], palette='Oranges')
+    axes[2].set_title('Test MAE Comparison', fontsize=14)
+    axes[2].set_ylabel('Test MAE', fontsize=12)
+    axes[2].set_xlabel(None)
+    axes[2].set_xticklabels(axes[2].get_xticklabels(), rotation=45, ha='right')
+
+    # Remove the borders (spines) and background for each subplot
+    for ax in axes:
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+        ax.set_facecolor('none')  
+        ax.grid(False) 
+
+    plt.show()
+
 
 
 ## --------------------------------------
