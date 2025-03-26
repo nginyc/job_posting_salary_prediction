@@ -25,6 +25,6 @@ Run the notebooks in the following order:
 5. The following other notebooks use `data/jobs_clean_jd.csv` to train and evaluate different models:
     - `evaluate_stats_models.ipynb`
     - `train_linear_model.ipynb`
-    - `train_xgb_model.ipynb`
+    - `train_gradient_boosting_model.ipynb`
 
 

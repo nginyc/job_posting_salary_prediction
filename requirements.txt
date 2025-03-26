@@ -14,3 +14,4 @@ tf-keras
 openai
 dotenv
 tqdm
+scikit-optimize
