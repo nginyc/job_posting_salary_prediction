@@ -1,5 +1,10 @@
 # Job Posting Salary Prediction
 
+Try it out on [Hugging Face](https://huggingface.co/spaces/nginyc/job_posting_salary_prediction_app)!
+
+![](./demo.png)
+
+
 ## Setup
 
 ```sh
@@ -26,5 +31,6 @@ Run the notebooks in the following order:
     - `evaluate_stats_models.ipynb`
     - `train_linear_model.ipynb`
     - `train_gradient_boosting_model.ipynb`
+    - `train_neural_network.ipynb`
 
 
