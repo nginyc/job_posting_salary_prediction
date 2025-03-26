@@ -15,3 +15,5 @@ openai
 dotenv
 tqdm
 scikit-optimize
+joblib
+gradio
