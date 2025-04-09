@@ -33,4 +33,5 @@ Run the notebooks in the following order:
     - `train_gradient_boosting_model.ipynb`
     - `train_neural_network.ipynb`
 
+You can run the notebooks with `jupyter lab` or in Visual Studio Code.
 

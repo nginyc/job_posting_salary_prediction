@@ -1,3 +1,4 @@
+from typing import Optional
 from idna import encode
 import numpy as np
 import pandas as pd
@@ -132,12 +133,16 @@ def plot_evaluation_results(names, results, x_label_rotation=0):
 ## Functions to encode features
 ## --------------------------------------
 
+@functools.lru_cache(maxsize=None)
+def get_sentence_transfomer():
+    # We use the pre-trained sentence-BERT model for encoding text data
+    # We pick the relatively smaller 80MB model with highest performance on sentence embeddings
+    # See https://www.sbert.net/docs/sentence_transformer/pretrained_models.html#original-models
+    return SentenceTransformer('all-MiniLM-L6-v2')
+
 class SentenceBertEncoder(BaseEstimator):  
     def __init__(self):
-        # We use the pre-trained sentence-BERT model for encoding text data
-        # We pick the model with highest performance on sentence embeddings
-        # See https://www.sbert.net/docs/sentence_transformer/pretrained_models.html#original-models
-        self._model = SentenceTransformer('all-mpnet-base-v2')
+        self._model = get_sentence_transfomer()
 
     def fit(self, X, y=None):
         return self
@@ -151,9 +156,10 @@ class SentenceBertEncoder(BaseEstimator):
     def similarity(self, X, Y):
         return self._model.similarity(X, Y)
     
-    def get_feature_names_out(self):
-        return [f'sbert_{i}' for i in range(768)]
-    
+    def get_feature_names_out(self, input_features: Optional[list[str]] = None):
+        feature_name = input_features[0] if input_features else ''
+        d = self._model.get_sentence_embedding_dimension() or 0
+        return [f'{feature_name}_sbert_{i}' for i in range(d)]
 
 experience_level_encoder = OrdinalEncoder(
     categories=[[
