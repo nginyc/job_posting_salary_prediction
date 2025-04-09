@@ -151,15 +151,15 @@ class SentenceBertEncoder(BaseEstimator):
         return self._model.encode(list(X))
 
     def transform(self, X: pd.DataFrame):
-        return self.encode(X.T.values[0])
+        return self.encode(np.array(X).flatten()).reshape(X.shape[0], -1)
     
     def similarity(self, X, Y):
         return self._model.similarity(X, Y)
     
     def get_feature_names_out(self, input_features: Optional[list[str]] = None):
-        feature_name = input_features[0] if input_features else ''
         d = self._model.get_sentence_embedding_dimension() or 0
-        return [f'{feature_name}_sbert_{i}' for i in range(d)]
+        names = list(input_features) if input_features is not None and len(input_features) > 0 else []
+        return [f'{name}_sbert_{i}' for name in names for i in range(d) ]
 
 experience_level_encoder = OrdinalEncoder(
     categories=[[
