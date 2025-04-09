@@ -8,10 +8,11 @@ numpy
 sentence_transformers
 gensim
 nltk
-tensorflow
-tf-keras
 openai
 dotenv
 tqdm
 scikit-optimize
 joblib
+torch 
+torchvision
+skorch
