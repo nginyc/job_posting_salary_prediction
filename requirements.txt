@@ -16,3 +16,4 @@ joblib
 torch 
 torchvision
 skorch
+papermill
