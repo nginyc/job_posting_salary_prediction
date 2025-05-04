@@ -12,7 +12,7 @@ openai
 dotenv
 tqdm
 scikit-optimize
-joblib
+cloudpickle
 torch 
 torchvision
 skorch
