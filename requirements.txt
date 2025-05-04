@@ -8,11 +8,12 @@ numpy
 sentence_transformers
 gensim
 nltk
-tensorflow
-category_encoders
-tf-keras
 openai
 dotenv
 tqdm
 scikit-optimize
-joblib
+cloudpickle
+torch 
+torchvision
+skorch
+papermill
