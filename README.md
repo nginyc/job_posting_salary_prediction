@@ -8,7 +8,7 @@ This easily beats basic statistical methods, such as aggregating salaries by job
 
 The ML model is trained on [the US LinkedIn Job Postings Kaggle dataset](https://www.kaggle.com/datasets/arshkon/linkedin-job-postings). The latest data is dated **April 2024**.
 
-Try out our best performing model deployed on [this Hugging Face space 🤗](https://huggingface.co/spaces/nginyc/job_posting_salary_prediction_app)
+Try out our best performing model deployed on [this Hugging Face space](https://huggingface.co/spaces/nginyc/job_posting_salary_prediction_app) 🤗
 
 ![](./demo.png)
 
@@ -24,7 +24,7 @@ We formulate this as a **regression** problem to predict a continuous salary val
 - **Company's industry** (e.g. "Construction" and "Banking")
 - **Company's location** (e.g. "Jersey City, NJ in US")
 - **Company's employee count**
-- **Job description**, which embeds finer job details such as skill and certification requirements, etc
+- **Job description**, which embeds finer job details, such as skill and certification requirements, etc
 
 In particular, we use [the US LinkedIn Job Postings Kaggle dataset](https://www.kaggle.com/datasets/arshkon/linkedin-job-postings) for training and evaluation. Each US job posting in the dataset is an example, and we aim to predict its `normalized_salary`, an annualized estimate of the salary that the company had indicated on the LinkedIn job posting. 
 
@@ -90,7 +90,7 @@ Code: [`evaluate_stats_models.ipynb`](./evaluate_stats_models.ipynb).
 
 #### Linear Regression
 
-We explore linear regression models with L1 regularization (Lasso), L2 regularization (Ridge) and ElasticNet regularization as variants. Hyperparameter tuning is performed using [Bayesian optimization](https://scikit-optimize.github.io/stable/modules/generated/skopt.BayesSearchCV.html).
+We explore linear regression models with L1 regularization (Lasso), L2 regularization (Ridge) and ElasticNet regularization as variants. Hyperparameter tuning is performed using Bayesian optimization.
 
 | Model Variant | Test R² | Test MAE | Best Hyperparameters |
 |-------|---------|----------|----------------------|
@@ -104,7 +104,7 @@ Code: [`train_linear_model.ipynb`](./train_linear_model.ipynb).
 
 #### Random Forest
 
-We explore tuning a random forest using [Bayesian optimization](https://scikit-optimize.github.io/stable/modules/generated/skopt.BayesSearchCV.html).
+We explore tuning a random forest using Bayesian optimization.
 
 | Test R² | Test MAE | Best Hyperparameters |
 |---------|----------|----------------------|
@@ -114,7 +114,7 @@ Code: [`train_random_forest.ipynb`](./train_random_forest.ipynb)
 
 #### XGBoost
 
-We explore tuning a XGBoost model using [Bayesian optimization](https://scikit-optimize.github.io/stable/modules/generated/skopt.BayesSearchCV.html).
+We explore tuning a XGBoost model using Bayesian optimization.
 
 | Test R² | Test MAE | Best Hyperparameters |
 |---------|----------|----------------------|
@@ -124,11 +124,11 @@ Code: [`train_xgboost.ipynb`](./train_xgboost.ipynb)
 
 #### Multi-Layer Perceptron
 
-We explore tuning a Multi-Layer Perceptron (MLP) using [Bayesian optimization](https://scikit-optimize.github.io/stable/modules/generated/skopt.BayesSearchCV.html). As part of the tuning, feed-forward neural architectures of 1, 2, 3 and 4 hidden layers are explored.
+We explore tuning a Multi-Layer Perceptron (MLP) using Bayesian optimization. As part of the tuning, feed-forward neural architectures of 1, 2, 3 and 4 hidden layers are explored.
 
 | Test R² | Test MAE | Best Hyperparameters |
 |---------|----------|----------------------|
-| 0.6726 | $20,142 | `{'lambda1': 0.0001, 'lr': 0.00447, 'batch_size': 128, 'module__num_hidden_layers': 3, 'module__n_units_last': 256, 'module__dropout_rate': 0.5}` |
+| 0.6765 | $19,782 | `{'lambda1': 0.0001, 'lr': 0.00447, 'batch_size': 128, 'module__num_hidden_layers': 3, 'module__n_units_last': 256, 'module__dropout_rate': 0.5}` |
 
 Code: [`train_multi_layer_perceptron.ipynb`](./train_multi_layer_perceptron.ipynb), [`multi_layer_perceptron.py`](./multi_layer_perceptron.py)
 
@@ -139,18 +139,18 @@ Below is a comparison of the test performance across the different models.
 | Model | Test R² | Test MAE |
 |-------|---------|----------|
 | Statistical Model | 0.2231 | $34,806 |
-| Linear Regression | 0.5704 | $24,732 |
 | Random Forest | 0.4827 | $27,512 |
+| Linear Regression | 0.5704 | $24,732 |
 | XGBoost | 0.6430 | $21,779 |
-| Multi-Layer Perceptron | 0.6726 | $20,142 |
+| Multi-Layer Perceptron | 0.6765 | $19,782 |
 
 ![](./model_results_comparison.png)
 
-The best performing model is the **Multi-Layer Perceptron**, with a **test R² of 0.6726** and estimating salaries that are **$20,142 off** on average, a **42.1% reduction in mean absolute error** compared to basic statistical methods. 
+The best performing model is the **Multi-Layer Perceptron**, with a **test R² of 0.6765**. It estimates salaries that are **$19,782 off** on average, a **43.2% reduction in mean absolute error** compared to basic statistical methods. 
 
 The next best performing model is **XGBoost** with a **test R² of 0.6430** and a **test MAE of $21,779**, a **37.4% reduction** compared to basic statistical methods. 
 
-The results successfully demonstrate the usefulness of ML to more accurately estimate US job salaries.
+The results successfully demonstrate that ML is effective in estimating US job salaries more accurately.
 
 ## Replicating the Results 
 
@@ -174,7 +174,7 @@ Duplicate the file `.env.template` as `.env` and populate it with [your Gemini A
 
 Run the notebooks in the following order:
 
-1. `export_dataset.ipynb` reads original dataset from Kaggle and exports the raw dataset to `data/jobs.csv`
+1. `export_dataset.ipynb` reads the original dataset from Kaggle and exports the raw dataset to `data/jobs.csv`
 2. `clean_dataset.ipynb` reads from `data/jobs.csv`, filters, cleans and pre-processes the dataset for our problem statement and exports the clean data to `data/jobs_clean.csv`
 3. `preprocess_dataset.ipynb` reads from `data/jobs_clean.csv`, preprocesses data and exports the processed data to `data/jobs_processed.csv`. The processing performs LLM-based information extraction and will take a while, but it can be safely interrupted and resumed at any point as progress is saved to `data/extracted_job_attributes.csv`
 4. `split_dataset.ipynb` reads from `data/jobs_processed.csv` and splits it into train and test dataset at `data/jobs_train.csv` and `data/jobs_test.csv`

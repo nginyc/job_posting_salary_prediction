@@ -94,15 +94,16 @@ def evaluate_test_predictions(y_test_pred):
 ## --------------------------------------
 
 @functools.lru_cache(maxsize=None)
-def get_sentence_transfomer():
+def get_sentence_transfomer(device):
     # We use the pre-trained sentence-BERT model for encoding text data
     # We pick the relatively smaller 80MB model with highest performance on sentence embeddings
     # See https://www.sbert.net/docs/sentence_transformer/pretrained_models.html#original-models
-    return SentenceTransformer('all-MiniLM-L6-v2')
+    return SentenceTransformer('all-MiniLM-L6-v2', device=device)
 
 class SentenceBertEncoder(BaseEstimator):  
-    def __init__(self):
-        self._model = get_sentence_transfomer()
+    def __init__(self, device="cpu"):
+        self.device = device
+        self._model = get_sentence_transfomer(device)
 
     def fit(self, X, y=None):
         return self
@@ -149,34 +150,34 @@ work_type_encoder = OrdinalEncoder(
 ## Preprocessors
 ## --------------------------------------
 
-def get_preprocessor() -> Pipeline:
+def get_preprocessor(device = "cpu") -> Pipeline:
     return make_pipeline(
         ColumnTransformer(
             transformers=[
                 ('title_sbert_pca_encoder', make_pipeline(
-                    SentenceBertEncoder(),
+                    SentenceBertEncoder(device),
                 ), ['title']),
                 ('location_sbert_pca_encoder', make_pipeline(
-                    SentenceBertEncoder(),
+                    SentenceBertEncoder(device),
                 ), ['location']),
                 ('company_industries_sbert_pca_encoder', make_pipeline(
-                    SentenceBertEncoder(),
+                    SentenceBertEncoder(device),
                 ), ['company_industries']),
                 ('skills_sbert_pca_encoder', make_pipeline(
                     SimpleImputer(strategy='constant', fill_value='Unknown'),
-                    SentenceBertEncoder(),
+                    SentenceBertEncoder(device),
                 ), ['extracted_skill_requirement']),
                 ('education_sbert_pca_encoder', make_pipeline(
                     SimpleImputer(strategy='constant', fill_value='Unknown'),
-                    SentenceBertEncoder(),
+                    SentenceBertEncoder(device),
                 ), ['extracted_education_requirement']),
                 ('certification_sbert_pca_encoder', make_pipeline(
                     SimpleImputer(strategy='constant', fill_value='Unknown'),
-                    SentenceBertEncoder(),
+                    SentenceBertEncoder(device),
                 ), ['extracted_certification_requirement']),
                 ('experience_sbert_pca_encoder', make_pipeline(
                     SimpleImputer(strategy='constant', fill_value='Unknown'),
-                    SentenceBertEncoder(),
+                    SentenceBertEncoder(device),
                 ), ['extracted_experience_requirement']),
                 ('text_one_hot_encoder', 
                     OneHotEncoder(sparse_output=False, handle_unknown='infrequent_if_exist', min_frequency=10), 
