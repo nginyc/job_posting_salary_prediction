@@ -1,5 +1,17 @@
 # 💰 Job Posting Salary Prediction
 
+## Outline
+
+- [Introduction](#introduction)
+- [Project Description](#project-description)
+  - [🤖 ML Problem Definition](#-ml-problem-definition)
+  - [🧹 Dataset Cleaning](#-dataset-cleaning)
+  - [🔄 Data Preprocessing](#-data-preprocessing)
+  - [📊 Modelling and Results](#-modelling-and-results)
+  - [🏆 Summary of Results](#-summary-of-results)
+- [Replicating the Results](#replicating-the-results)
+- [Credits](#credits)
+
 ## Introduction
 
 This project aims to build a Machine Learning (ML) model for salary benchmarking. It estimates a job's salary given the job's details such as job title, location and job description. 
